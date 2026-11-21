@@ -9,14 +9,14 @@ Four models of increasing sophistication are compared on the same held-out test 
 | 0 | Rule baseline: regex normalization + edit-distance lexicon matcher | B – Classical NLP |
 | 1 | TF-IDF (uni+bigrams) + logistic regression (classical baseline) | B – Classical NLP |
 | 2 | Our own word2vec (skip-gram, trained on the training tweets) + feedforward network (SGD + backprop) | A – Neural networks |
-| 3 | BERT (`bert-base-uncased`) fine-tuned for classification | C – Transformers |
+| 3 | BERT (`bert-base-uncased`) fine-tuned for classification (English BERT instead of BERTurk/multilingual BERT, because the data is English) | C – Transformers |
 | 4 | Same BERT, dynamic INT8 quantization (PyTorch), latency budget 50 ms/message on CPU | D – Efficient models |
 
 The application runs the **quantized BERT** by default; the other models can be selected or compared side by side.
 
 ## Setup
 
-Requires **Python 3.10 – 3.12**.
+Requires **Python 3.11 or 3.12** (tested with Python 3.12.10 on Windows 11, CPU only).
 
 ```bash
 git clone https://github.com/felbakary82-sys/chat-moderation.git
@@ -42,6 +42,9 @@ python app.py
 ```
 
 Open http://127.0.0.1:7860. Add `--share` to get a public link anyone can try.
+
+**Troubleshooting (Windows):** if training stops with `DLL load failed ... An Application Control policy has blocked this file`,
+Windows *Smart App Control* is blocking NumPy. Turn it off in Windows Security → App & browser control → Smart App Control, then run again.
 
 To re-create the results table: `python evaluate.py` → `results/results.md`.
 
